@@ -81,7 +81,7 @@ $$
 
 $$
 \text{score}(s) =
-\sigma\!\left(\sum_{i=1}^{n} w_i x_i(s) + b\right), \qquad
+\sigma\left(\sum_{i=1}^{n} w_i x_i(s) + b\right), \qquad
 \sigma(z)=\frac{1}{1+\exp(-z)}
 $$
 
