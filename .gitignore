@@ -1,1 +1,7 @@
-/Manifest*.toml
+Manifest*.toml
+
+# 忽略所有本地备份文件
+*.bk
+
+
+docs/build/

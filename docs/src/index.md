@@ -1,4 +1,6 @@
-# REOBiomarker: Relative Expression Ordering-based Biomarker Identification
+# REOBiomarker
+
+**Relative Expression Ordering-based Biomarker Identification**
 
 [![Build Status](https://github.com/pathint/REOBiomarker.jl/actions/workflows/CI.yml/badge.svg?branch=main)](https://github.com/pathint/REOBiomarker.jl/actions/workflows/CI.yml?query=branch%3Amain)
 
@@ -45,55 +47,55 @@ metrics = evaluate_reo(model, data, genes, labels)
 
 ## Algorithm Overview
 
-For a sample $s$ and the $i$-th direction-aligned gene pair $(A_i, B_i)$,
+For a sample `s` and the `i`-th direction-aligned gene pair `(A_i, B_i)`,
 REOBiomarker converts the ordering into a binary feature:
 
-$$
+```math
 x_i(s) = \mathbf{1}\{E_{A_i,s} > E_{B_i,s}\}
-$$
+```
 
-where $E_{A_i,s}$ and $E_{B_i,s}$ are the expression values of genes $A_i$
-and $B_i$ in sample $s$.  $x_i(s)=1$ indicates the pair supports the positive
-class; $x_i(s)=0$ indicates it does not.
+where `E_{A_i,s}` and `E_{B_i,s}` are the expression values of genes `A_i`
+and `B_i` in sample `s`.  `x_i(s)=1` indicates the pair supports the positive
+class; `x_i(s)=0` indicates it does not.
 
 REOBiomarker supports three classification strategies:
 
-- **VotingMethod** — equal-weight majority vote.  With $n$ selected pairs the
+- **VotingMethod** — equal-weight majority vote.  With `n` selected pairs the
   sample score is
 
-$$
+```math
 \text{score}(s) = \frac{1}{n}\sum_{i=1}^{n} x_i(s) + b
-$$
+```
 
-  where $b$ is a bias calibrated during training; when $b=0$ this reduces to
+  where `b` is a bias calibrated during training; when `b=0` this reduces to
   ordinary majority voting.
 
 - **RFMethod** — random-forest stump stability selection with normalised
   feature importance as weights:
 
-$$
+```math
 \text{score}(s) = \sum_{i=1}^{n} w_i x_i(s), \qquad
 w_i \ge 0,\quad \sum_{i=1}^{n} w_i = 1
-$$
+```
 
 - **LassoMethod** — Lasso/Elastic Net stability selection with a logistic
   (sigmoid) output:
 
-$$
+```math
 \text{score}(s) =
-\sigma\!\left(\sum_{i=1}^{n} w_i x_i(s) + b\right), \qquad
-\sigma(z)=\frac{1}{1+\exp(-z)}
-$$
+σ\!\left(\sum_{i=1}^{n} w_i x_i(s) + b\right), \qquad
+σ(z)=\frac{1}{1+\exp(-z)}
+```
 
 The final classification rule is:
 
-$$
+```math
 \hat{y}(s)=
 \begin{cases}
 1, & \text{score}(s) \ge 0.5,\\
 0, & \text{score}(s) < 0.5.
 \end{cases}
-$$
+```
 
 ## Pipeline
 
@@ -311,5 +313,3 @@ argument.
 - **Too many candidates**: raise `bqc_threshold` or `p0_threshold`; lower
   `max_occurrence` or `cor_threshold`.
 - **Unstable results**: fix the random seed and increase `ss_iterations`.
-
-
